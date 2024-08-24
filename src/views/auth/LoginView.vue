@@ -16,7 +16,6 @@
                 }" />
 
             <FormKit type="submit" :disabled="loading">
-                <!-- Spinner y Texto del botón -->
                 <div class="flex items-center justify-center">
                     <div v-if="loading"
                         class="spinner-border animate-spin inline-block w-6 h-6 border-4 rounded-full border-t-transparent border-white mr-3">
@@ -40,7 +39,7 @@ const router = useRouter()
 
 const handleSumit = async (formData) => {
     try {
-        loading.value = true; // Mostrar spinner
+        loading.value = true;
         const { data: { token } } = await AuthAPI.login(formData)
         localStorage.setItem('AUTH_TOKEN', token)
         router.push({ name: 'my-appointments' })
@@ -50,7 +49,7 @@ const handleSumit = async (formData) => {
             type: 'error'
         })
     } finally {
-        loading.value = false; // Ocultar spinner
+        loading.value = false;
     }
 }
 </script>
