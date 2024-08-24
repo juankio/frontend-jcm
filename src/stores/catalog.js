@@ -5,6 +5,7 @@ import CatalogAPI from '@/api/CatalogAPI';
 
 export const useCatalogStore = defineStore('catalog', () => {
   const services = ref([]);
+  const loading = ref(false);
 
   const fetchServices = async () => {
     try {
@@ -16,16 +17,20 @@ export const useCatalogStore = defineStore('catalog', () => {
   };
 
   const updateServices = async (updatedServices) => {
+    loading.value = true;  
     try {
       await CatalogAPI.updateServices(updatedServices);
       await fetchServices();
     } catch (error) {
       console.error(error);
+    } finally {
+      loading.value = false;
     }
   };
 
   return {
     services,
+    loading,
     fetchServices,
     updateServices,
   };
