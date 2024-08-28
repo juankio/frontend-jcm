@@ -67,6 +67,7 @@ const disableDate = (date) => {
     const today = new Date();
     return date < today || date.getMonth() > today.getMonth() + 1 || [0].includes(date.getDay());
 };
+
 </script>
 
 <style scoped>

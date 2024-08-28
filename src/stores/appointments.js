@@ -44,14 +44,14 @@ export const useAppointmentsStore= defineStore('appointments', ()=>{
         }
         
     })
-    function setSelectedAppointment(appointment) {
-        console.log(appointment);
-        services.value = appointment.serviceDetails; 
-        date.value = converToDDMMYYYY(appointment.date);
-        time.value = appointment.time;
-        appointmentId.value = appointment._id;
+    function setSelectedAppointment(appointment){
+        console.log(appointment)
+        services.value= appointment.services
+        date.value = converToDDMMYYYY(appointment.date)
+        time.value= appointment.time
+        appointmentId.value = appointment._id
+        
     }
-    
    
     function onServiceSelected(service){
         if ( services.value.some(selecService =>selecService._id=== service._id)) {
