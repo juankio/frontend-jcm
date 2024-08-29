@@ -19,19 +19,25 @@
                 :to="{ name: 'edit-appointment', params: { id: appointment._id } }">
                 Editar Cita
             </RouterLink>
+            <!-- Pasar correctamente el id de la cita -->
             <button class="bg-red-600 rounded-lg p-3 text-white text-sm uppercase font-black flex-1 md:flex-none"
-                @click="appointments.cancelAppointment(appointment._id)">
+                @click="openCancelModal(appointment._id)">
                 Cancelar Cita
             </button>
         </div>
+
+        <!-- Modal -->
+        <Modal :isOpen="isCancelModalOpen" message="¿Deseas cancelar esta cita?" @confirm="handleCancel"
+            @cancel="closeCancelModal" />
     </div>
 </template>
 
 <script setup>
 import { displayDate } from '@/helpers/date'
+import { ref } from 'vue';
 import { formatCurrenCy } from '@/helpers'
+import Modal from '@/components/modal.vue'
 import { useAppointmentsStore } from '@/stores/appointments';
-
 
 const appointments = useAppointmentsStore()
 defineProps({
@@ -39,4 +45,23 @@ defineProps({
         type: Object
     }
 })
+
+const isCancelModalOpen = ref(false)
+const appointmentIdToCancel = ref(null)
+
+// Recibe correctamente el id de la cita al abrir el modal
+const openCancelModal = (id) => {
+    appointmentIdToCancel.value = id
+    isCancelModalOpen.value = true
+}
+
+const closeCancelModal = () => {
+    isCancelModalOpen.value = false
+    appointmentIdToCancel.value = null
+}
+
+const handleCancel = () => {
+    appointments.cancelAppointment(appointmentIdToCancel.value)
+    closeCancelModal()
+}
 </script>
