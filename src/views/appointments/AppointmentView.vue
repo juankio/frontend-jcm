@@ -19,9 +19,8 @@
             <h3 class="text-3xl font-extrabold text-white">Fecha y hora</h3>
 
             <div class="lg:flex gap-5 items-start">
-                <div class="w-50 ld:w-96 bg-white flex justify-center rounded-lg">
-                    <VueTailwindDatepicker :disable-date="disableDate" i18n="es-mx" as-single no-input
-                        :formatter="formatter" v-model="appointments.date" />
+                <div class="w-50 lg:w-96  flex justify-center rounded-lg">
+                    <DatePicker v-model="date" mode="date" is-dark="system" title-position="left" :min-date="today" />
                 </div>
                 <div v-if="appointments.isDateSelected"
                     class="flex-1 grid grid-cols-1 xl:grid-cols-2 gap-5 mt-10 lg:mt-0">
@@ -38,7 +37,6 @@
                 <button
                     class="w-full md:w-auto bg-green-600 p-3 rounded-lg uppercase font-black text-white flex items-center justify-center"
                     @click="appointments.saveAppointment" :disabled="appointments.loading">
-
                     <div v-if="appointments.loading"
                         class="spinner-border animate-spin inline-block w-6 h-6 border-4 rounded-full border-t-transparent border-white mr-3">
                     </div>
@@ -50,23 +48,31 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import VueTailwindDatepicker from 'vue-tailwind-datepicker';
+import { ref, computed, watch } from 'vue';
+import { DatePicker } from 'v-calendar';
+import { format } from 'date-fns';
+import 'v-calendar/style.css';
 import SelectedService from '@/components/SelectedService.vue';
 import { useAppointmentsStore } from '@/stores/appointments';
 import { formatCurrenCy } from '@/helpers/index';
 
 const appointments = useAppointmentsStore();
 
+const date = ref(new Date());
+const today = ref(new Date());
 const formatter = ref({
-    date: 'DD/MM/YYYY',
-    month: 'MMM'
+    date: 'dd/MM/yyyy',
+    month: 'MMM',
 });
 
-const disableDate = (date) => {
-    const today = new Date();
-    return date < today || date.getMonth() > today.getMonth() + 1 || [0].includes(date.getDay());
-};
+const formattedDate = computed(() => {
+    return format(date.value, formatter.value.date);
+});
+
+// Watch for changes in the formattedDate and update appointments.date
+watch(formattedDate, (newValue) => {
+    appointments.date = newValue;
+});
 
 </script>
 

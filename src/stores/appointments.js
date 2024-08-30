@@ -83,7 +83,7 @@ export const useAppointmentsStore = defineStore('appointments', () => {
         try {
             let data;
             if (appointmentId.value) {
-                ({ data } = await AppointmentAPI.update(appointmentId.value, appointment));
+                ({ data } = await AppointmentAPI.updete(appointmentId.value, appointment));
             } else {
                 ({ data } = await AppointmentAPI.create(appointment));
             }

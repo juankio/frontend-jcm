@@ -5,6 +5,7 @@ import { createPinia } from 'pinia'
 import { plugin, defaultConfig } from '@formkit/vue'
 import { useToast} from 'vue-toast-notification'
 import config from '../formkit.config.js'
+import VCalendar from 'v-calendar';
 
 import App from './App.vue'
 import router from './router'
@@ -29,5 +30,9 @@ app.component('font-awesome-icon', FontAwesomeIcon);
 app.use(createPinia())
 app.use(plugin, defaultConfig(config))
 app.use(router)
+app.use(VCalendar, {
+    componentPrefix: 'v',  // Use <v-calendar /> instead of <v-calendar />
+  });
+  
 
 app.mount('#app')
