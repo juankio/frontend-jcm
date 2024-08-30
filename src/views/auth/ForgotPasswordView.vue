@@ -15,7 +15,8 @@
                     <div v-if="loading"
                         class="spinner-border animate-spin inline-block w-6 h-6 border-4 rounded-full border-t-transparent border-white mr-3">
                     </div>
-                    Enviar Instrucciones
+
+                    <p class="text-xl">Enviar Instrucciones</p>
                 </div>
             </FormKit>
         </FormKit>

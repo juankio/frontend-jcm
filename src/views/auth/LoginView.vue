@@ -20,7 +20,7 @@
                     <div v-if="loading"
                         class="spinner-border animate-spin inline-block w-6 h-6 border-4 rounded-full border-t-transparent border-white mr-3">
                     </div>
-                    <p class="text-3xl">Iniciar sesion</p>
+                    <p class="text-xl">Iniciar sesion</p>
                 </div>
             </FormKit>
         </FormKit>
