@@ -8,8 +8,11 @@
                     class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition">
                     Cancelar
                 </button>
-                <button @click="confirm" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">
-                    Confirmar
+                <button @click="confirm" :disabled="loading"
+                    class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition flex items-center justify-center">
+                    <span v-if="loading" class="loader mr-2"></span>
+                    <span v-if="!loading">Confirmar</span>
+                    <span v-else>Confirmando...</span>
                 </button>
             </div>
         </div>
@@ -21,7 +24,8 @@ import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
     isOpen: Boolean,
-    message: String
+    message: String,
+    loading: Boolean
 });
 
 const emit = defineEmits(['confirm', 'cancel']);
@@ -29,3 +33,20 @@ const emit = defineEmits(['confirm', 'cancel']);
 const confirm = () => emit('confirm');
 const cancel = () => emit('cancel');
 </script>
+
+<style scoped>
+.loader {
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-left-color: #ffffff;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+</style>

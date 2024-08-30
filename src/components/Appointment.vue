@@ -19,16 +19,15 @@
                 :to="{ name: 'edit-appointment', params: { id: appointment._id } }">
                 Editar Cita
             </RouterLink>
-            <!-- Pasar correctamente el id de la cita -->
             <button class="bg-red-600 rounded-lg p-3 text-white text-sm uppercase font-black flex-1 md:flex-none"
                 @click="openCancelModal(appointment._id)">
                 Cancelar Cita
             </button>
         </div>
 
-        <!-- Modal -->
-        <Modal :isOpen="isCancelModalOpen" message="¿Deseas cancelar esta cita?" @confirm="handleCancel"
-            @cancel="closeCancelModal" />
+        <Modal :isOpen="isCancelModalOpen" :loading="isLoading" message="¿Deseas cancelar esta cita?"
+            @confirm="handleCancel" @cancel="closeCancelModal" />
+
     </div>
 </template>
 
@@ -48,8 +47,8 @@ defineProps({
 
 const isCancelModalOpen = ref(false)
 const appointmentIdToCancel = ref(null)
+const isLoading = ref(false)
 
-// Recibe correctamente el id de la cita al abrir el modal
 const openCancelModal = (id) => {
     appointmentIdToCancel.value = id
     isCancelModalOpen.value = true
@@ -58,10 +57,16 @@ const openCancelModal = (id) => {
 const closeCancelModal = () => {
     isCancelModalOpen.value = false
     appointmentIdToCancel.value = null
+    isLoading.value = false
 }
 
-const handleCancel = () => {
-    appointments.cancelAppointment(appointmentIdToCancel.value)
-    closeCancelModal()
+const handleCancel = async () => {
+    isLoading.value = true
+    try {
+        await appointments.cancelAppointment(appointmentIdToCancel.value)
+        closeCancelModal()
+    } catch (error) {
+        isLoading.value = false
+    }
 }
 </script>
