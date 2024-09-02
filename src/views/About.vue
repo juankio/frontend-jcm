@@ -42,7 +42,6 @@
                 </ul>
             </div>
 
-            <!-- Componente 3: Formas de Pago -->
             <div
                 class="bg-green-900 text-white py-6 px-8 rounded-lg shadow-md text-left transform transition-transform hover:scale-105 flex flex-col">
                 <h1 class="text-2xl font-bold mb-4">Formas de Pago Aceptadas</h1>
@@ -63,7 +62,6 @@
                 <p class="text-xs mt-4">Todos los pagos se realizarán en persona.</p>
             </div>
 
-            <!-- Componente 4: Logros -->
             <div
                 class="bg-purple-900 text-white py-8 px-10 rounded-lg shadow-md text-left transform transition-transform hover:scale-105 flex flex-col">
                 <h1 class="text-2xl font-bold mb-4">Nuestros Logros</h1>
@@ -83,7 +81,6 @@
                 </ul>
             </div>
 
-            <!-- Componente 5: Contacto -->
             <div
                 class="bg-yellow-900 mt-6 text-white py-8 px-10 rounded-lg shadow-md text-left transform transition-transform hover:scale-105 flex flex-col">
                 <h1 class="text-2xl font-bold mb-2">¡Contáctanos!</h1>
@@ -123,7 +120,6 @@
                 </div>
             </div>
 
-            <!-- Componente 6: Ubicación -->
             <div
                 class="bg-red-900 py-8 px-10 text-white rounded-lg shadow-md text-left transform transition-transform hover:scale-105 md:col-span-2 flex flex-col">
                 <h1 class="text-4xl font-bold mb-2">Nuestra Ubicación</h1>
