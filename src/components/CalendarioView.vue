@@ -14,15 +14,13 @@ const props = defineProps({
 
 // Transformar las citas en eventos del calendario
 const events = computed(() =>
-    props.appointments.map((appointment) => ({
-        title: ${appointment.user?.name || 'Sin nombre'} - ${appointment.time},
-        date: appointment.date, // Fecha de la cita
-        extendedProps: {
-            email: appointment.user?.email || '',
-            services: appointment.serviceDetails || [],
-            totalAmount: appointment.totalAmount || 0,
-        },
-    }))
+  props.appointments.map((appointment) => ({
+      title: `${appointment.user?.name || 'Sin nombre'} - ${appointment.time}`,
+      date: appointment.date, // Fecha de la cita
+      extendedProps: {
+          // Otros props adicionales
+      },
+  }))
 );
 
 // Configuración del calendario

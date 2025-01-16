@@ -1,3 +1,77 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* Fondo general del calendario */
+.fc {
+  background-color: #f8f9fa; /* Fondo claro */
+  color: #212529; /* Texto oscuro */
+  border-color: #ddd; /* Bordes suaves */
+}
+
+/* Barra de herramientas del calendario */
+.fc-toolbar {
+  background-color: #ffffff; /* Fondo blanco */
+  border-bottom: 1px solid #ddd; /* Línea separadora */
+}
+
+/* Día actual */
+.fc-day-today {
+  background-color: #e9f7ef !important; /* Fondo verde claro */
+  border: 1px solid #4CAF50; /* Bordes verdes */
+}
+
+/* Evento del calendario */
+.fc-event {
+  background-color: #4CAF50; /* Fondo verde */
+  color: #fff; /* Texto blanco */
+  border-radius: 5px; /* Bordes redondeados */
+  padding: 5px; /* Espaciado interno */
+  border: none; /* Sin bordes adicionales */
+  font-size: 14px; /* Tamaño del texto */
+}
+
+/* Texto de la hora del evento */
+.fc-event-time {
+  font-weight: bold; /* Texto en negrita */
+}
+
+/* Número del día */
+.fc-daygrid-day-number {
+  color: #495057; /* Color del texto */
+  font-size: 14px; /* Tamaño del texto */
+  font-weight: bold; /* Texto en negrita */
+}
+
+/* Etiquetas de las horas */
+.fc-timegrid-slot-label {
+  color: #495057; /* Colores más agradables */
+  font-size: 12px; /* Tamaño del texto */
+}
+
+/* Grid de las horas */
+.fc-timegrid {
+  border-color: #ddd; /* Color de las líneas del grid */
+}
+
+/* Scroll del calendario */
+.fc-scrollgrid {
+  border: none; /* Sin bordes */
+}
+
+/* Eventos en "all-day" */
+.fc-daygrid-block-event {
+  background-color: #ff5722; /* Fondo naranja */
+  color: white; /* Texto blanco */
+  font-size: 12px; /* Tamaño del texto */
+}
+
+/* Hover sobre un evento */
+.fc-event:hover {
+  background-color: #388E3C; /* Verde más oscuro */
+  cursor: pointer; /* Cambia a cursor de mano */
+}
+
+/* Día seleccionado (si usas dateClick) */
+.fc-highlight {
+  background-color: #c8e6c9 !important; /* Fondo verde claro */
+}
