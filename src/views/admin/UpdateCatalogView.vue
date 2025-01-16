@@ -1,6 +1,6 @@
 <template>
     <div class="p-5 space-y-3 rounded-lg shadow-md bg-gray-800">
-        <h1 class="text-2xl font-black text-green-500 mb-6">Actualizar Catálogo</h1>
+        <h1 class="text-2xl font-black text-green-500 mb-6">Administrar Catálogo</h1>
         <form @submit.prevent="updateCatalog">
             <div v-for="(service, index) in catalogStore.services" :key="service._id" :class="{
                 'p-4 mb-4 border rounded-lg shadow-sm transition-all duration-300': true,
@@ -41,10 +41,15 @@
                 </div>
 
                 <!-- Botones -->
-                <div class="flex justify-between">
+                <div class="flex justify-between space-x-3">
                     <button type="button" @click="toggleEdit(service, index)"
-                        class="bg-blue-600 rounded-lg p-3 text-white text-sm uppercase font-black flex-1 md:flex-none mr-3 transition-all duration-300">
+                        class="bg-blue-600 rounded-lg p-3 text-white text-sm uppercase font-black flex-1 md:flex-none transition-all duration-300">
                         {{ service.isEditable ? 'Cancelar' : 'Editar' }}
+                    </button>
+
+                    <button type="button" @click="deleteService(service._id)"
+                        class="bg-red-600 rounded-lg p-3 text-white text-sm uppercase font-black flex-1 md:flex-none transition-all duration-300">
+                        Eliminar
                     </button>
 
                     <button type="submit" v-if="service.isEditable"
@@ -80,7 +85,6 @@ onMounted(async () => {
 });
 
 const toggleEdit = (service, index) => {
-
     catalogStore.services.forEach((s, i) => {
         if (i !== index) {
             s.isEditable = false;
@@ -102,7 +106,6 @@ const hasChanges = (original, edited) => {
     );
 };
 
-
 const updateCatalog = async () => {
     try {
         const servicesToUpdate = catalogStore.services.filter((service, index) =>
@@ -112,8 +115,7 @@ const updateCatalog = async () => {
         if (servicesToUpdate.length > 0) {
             await catalogStore.updateServices(servicesToUpdate);
             toast.success('Servicio actualizado correctamente!');
-            catalogStore.services.forEach(service => service.isEditable = false);
-            // Actualizar la copia de servicios originales
+            catalogStore.services.forEach((service) => (service.isEditable = false));
             originalServices.value = JSON.parse(JSON.stringify(catalogStore.services));
         } else {
             toast.warning('No hay cambios para actualizar');
@@ -122,23 +124,13 @@ const updateCatalog = async () => {
         toast.error('Hubo un problema al actualizar el servicio.');
     }
 };
+
+const deleteService = async (id) => {
+    try {
+        await catalogStore.deleteService(id);
+        toast.success('Servicio eliminado correctamente!');
+    } catch (error) {
+        toast.error('Hubo un problema al eliminar el servicio.');
+    }
+};
 </script>
-
-<style scoped>
-.spinner-border {
-    border-width: 4px;
-    border-style: solid;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-</style>

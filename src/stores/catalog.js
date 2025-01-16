@@ -1,4 +1,3 @@
-// stores/catalog.js
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import CatalogAPI from '@/api/CatalogAPI';
@@ -17,7 +16,7 @@ export const useCatalogStore = defineStore('catalog', () => {
   };
 
   const updateServices = async (updatedServices) => {
-    loading.value = true;  
+    loading.value = true;
     try {
       await CatalogAPI.updateServices(updatedServices);
       await fetchServices();
@@ -28,10 +27,20 @@ export const useCatalogStore = defineStore('catalog', () => {
     }
   };
 
+  const deleteService = async (id) => {
+    try {
+      await CatalogAPI.deleteService(id);
+      await fetchServices();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return {
     services,
     loading,
     fetchServices,
     updateServices,
+    deleteService,
   };
 });
