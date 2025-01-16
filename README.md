@@ -35,13 +35,14 @@ La aplicación permite:
 ```bash
 npm install
 
-
+```
 ## Iniciar el Servidor de Desarrollo
 
 ```bash
 npm run dev
-
+```
 ## Compilación para Producción
 
 ```bash
 npm run buil
+```
