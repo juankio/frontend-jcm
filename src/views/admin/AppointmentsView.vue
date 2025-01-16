@@ -39,7 +39,7 @@
 import { ref } from 'vue';
 import { useUserStore } from '@/stores/user';
 import AdminAppointment from '@/components/AdminAppointment.vue';
-import CalendarView from '@/components/CalendarView.vue';
+import CalendarView from '@/components/CalendarioView.vue';
 
 // Store de usuario
 const user = useUserStore();
