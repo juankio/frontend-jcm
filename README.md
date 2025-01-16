@@ -1,29 +1,35 @@
-# frontend
+# Proyecto de Grado: JCM Fotos y Videos
 
-This template should help get you started developing with Vue 3 in Vite.
+Este proyecto corresponde al sistema de gestión de citas y administración para la empresa **JCM Fotos y Videos**. Está diseñado para optimizar los procesos de reserva, administración de clientes y comunicación, ofreciendo una plataforma moderna y eficiente.
 
-## Recommended IDE Setup
+## Descripción
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+La aplicación permite:
+- **Clientes**: Agendar citas de forma sencilla y recibir confirmaciones automáticas por correo.
+- **Administradores**: Gestionar citas y clientes desde un **panel de control**, con un **calendario interactivo** similar a Google Calendar.
+- **Comunicación**: Envío de recordatorios de citas por correo utilizando **SendGrid**.
+- **Diseño**: Interfaz responsiva y moderna con botones animados para mejorar la experiencia del usuario.
 
-## Customize configuration
+## Tecnologías
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+### Frontend
+- **Vue 3**
+- **Vite**
+- **Tailwind CSS**
 
-## Project Setup
+### Backend
+- **Node.js**
+- **Express.js**
+- **MongoDB**
 
-```sh
+### Servicios Adicionales
+- **SendGrid** para el envío de correos electrónicos.
+
+---
+
+## Configuración del Proyecto
+
+### Instalación de Dependencias
+
+```bash
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
