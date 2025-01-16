@@ -1,3 +1,4 @@
+
 # Proyecto de Grado: JCM Fotos y Videos
 
 Este proyecto corresponde al sistema de gestión de citas y administración para la empresa **JCM Fotos y Videos**. Está diseñado para optimizar los procesos de reserva, administración de clientes y comunicación, ofreciendo una plataforma moderna y eficiente.
@@ -33,3 +34,14 @@ La aplicación permite:
 
 ```bash
 npm install
+
+
+## Iniciar el Servidor de Desarrollo
+
+```bash
+npm run dev
+
+## Compilación para Producción
+
+```bash
+npm run buil
