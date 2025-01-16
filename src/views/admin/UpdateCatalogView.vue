@@ -5,9 +5,9 @@
             <div v-for="(service, index) in catalogStore.services" :key="service._id" :class="{
                 'p-4 mb-4 border rounded-lg shadow-sm transition-all duration-300': true,
                 'bg-gray-700 text-gray-400': !service.isEditable,
-                'bg-white text-black border-green-500': service.isEditable
+                'bg-white text-black border-green-500': service.isEditable,
             }">
-
+                <!-- Nombre del Servicio -->
                 <div class="mb-4">
                     <label class="block text-xl font-black"
                         :class="service.isEditable ? 'text-green-600' : 'text-gray-400'">
@@ -18,6 +18,7 @@
                         :class="service.isEditable ? 'bg-white text-black' : 'bg-gray-700 text-gray-400 cursor-not-allowed'" />
                 </div>
 
+                <!-- Precio del Servicio -->
                 <div class="mb-4">
                     <label class="block text-xl font-black"
                         :class="service.isEditable ? 'text-green-600' : 'text-gray-400'">
@@ -28,6 +29,18 @@
                         :class="service.isEditable ? 'bg-white text-black' : 'bg-gray-700 text-gray-400 cursor-not-allowed'" />
                 </div>
 
+                <!-- Descripción del Servicio -->
+                <div class="mb-4">
+                    <label class="block text-xl font-black"
+                        :class="service.isEditable ? 'text-green-600' : 'text-gray-400'">
+                        Descripción del Servicio
+                    </label>
+                    <textarea v-model="service.description" :disabled="!service.isEditable"
+                        class="w-full p-3 border rounded-lg"
+                        :class="service.isEditable ? 'bg-white text-black' : 'bg-gray-700 text-gray-400 cursor-not-allowed'"></textarea>
+                </div>
+
+                <!-- Botones -->
                 <div class="flex justify-between">
                     <button type="button" @click="toggleEdit(service, index)"
                         class="bg-blue-600 rounded-lg p-3 text-white text-sm uppercase font-black flex-1 md:flex-none mr-3 transition-all duration-300">
@@ -82,8 +95,13 @@ const toggleEdit = (service, index) => {
 };
 
 const hasChanges = (original, edited) => {
-    return original.name !== edited.name || original.price !== edited.price;
+    return (
+        original.name !== edited.name ||
+        original.price !== edited.price ||
+        original.description !== edited.description
+    );
 };
+
 
 const updateCatalog = async () => {
     try {
