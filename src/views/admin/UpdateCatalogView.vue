@@ -1,60 +1,56 @@
 <template>
-    <div class="p-5 space-y-3 rounded-lg shadow-md bg-gray-800">
+    <div class="p-5 space-y-3 rounded-lg shadow-md ">
         <h1 class="text-2xl font-black text-green-500 mb-6">Administrar Catálogo</h1>
-        <form @submit.prevent="updateCatalog">
+        <FormKit type="form" @submit="handleSubmit" :actions="false">
             <div v-for="(service, index) in catalogStore.services" :key="service._id" :class="{
                 'p-4 mb-4 border rounded-lg shadow-sm transition-all duration-300': true,
                 'bg-gray-700 text-gray-400': !service.isEditable,
-                'bg-white text-black border-green-500': service.isEditable,
+                'bg-gray-700 text-black border-green-500': service.isEditable,
             }">
+
                 <!-- Nombre del Servicio -->
-                <div class="mb-4">
-                    <label class="block text-xl font-black"
-                        :class="service.isEditable ? 'text-green-600' : 'text-gray-400'">
-                        Nombre del Servicio
-                    </label>
-                    <input type="text" v-model="service.name" :disabled="!service.isEditable"
-                        class="w-full p-3 border rounded-lg"
-                        :class="service.isEditable ? 'bg-white text-black' : 'bg-gray-700 text-gray-400 cursor-not-allowed'" />
-                </div>
+                <FormKit type="text" label="Nombre del Servicio" :disabled="!service.isEditable" v-model="service.name"
+                    validation="required" :validation-messages="{
+                        required: 'El nombre es obligatorio',
+                    }" :class="{
+                        'opacity-100': service.isEditable,
+                        'opacity-50 cursor-not-allowed': !service.isEditable,
+                    }" :input-class="service.isEditable ? 'bg-white text-black' : 'bg-gray-600 text-gray-500'" />
 
                 <!-- Precio del Servicio -->
-                <div class="mb-4">
-                    <label class="block text-xl font-black"
-                        :class="service.isEditable ? 'text-green-600' : 'text-gray-400'">
-                        Precio del Servicio
-                    </label>
-                    <input type="number" v-model="service.price" :disabled="!service.isEditable"
-                        class="w-full p-3 border rounded-lg"
-                        :class="service.isEditable ? 'bg-white text-black' : 'bg-gray-700 text-gray-400 cursor-not-allowed'" />
-                </div>
+                <FormKit type="number" label="Precio del Servicio" :disabled="!service.isEditable"
+                    v-model="service.price" validation="required|number" :validation-messages="{
+                        required: 'El precio es obligatorio',
+                        number: 'El precio debe ser un número válido',
+                    }" :class="{
+                        'opacity-100': service.isEditable,
+                        'opacity-50 cursor-not-allowed': !service.isEditable,
+                    }" :input-class="service.isEditable ? 'bg-white text-black' : 'bg-gray-600 text-gray-500'" />
 
                 <!-- Descripción del Servicio -->
-                <div class="mb-4">
-                    <label class="block text-xl font-black"
-                        :class="service.isEditable ? 'text-green-600' : 'text-gray-400'">
-                        Descripción del Servicio
-                    </label>
-                    <textarea v-model="service.description" :disabled="!service.isEditable"
-                        class="w-full p-3 border rounded-lg"
-                        :class="service.isEditable ? 'bg-white text-black' : 'bg-gray-700 text-gray-400 cursor-not-allowed'"></textarea>
-                </div>
+                <FormKit type="textarea" label="Descripción del Servicio" :disabled="!service.isEditable"
+                    v-model="service.description" validation="required" :validation-messages="{
+                        required: 'La descripción es obligatoria',
+                    }" :class="{
+                        'opacity-100': service.isEditable,
+                        'opacity-50 cursor-not-allowed': !service.isEditable,
+                    }" :input-class="service.isEditable ? 'bg-white text-black' : 'bg-gray-600 text-gray-500'" />
 
                 <!-- Botones -->
-                <div class="flex justify-between space-x-3">
+                <div class="flex justify-between space-x-3 mt-4">
                     <button type="button" @click="toggleEdit(service, index)"
-                        class="bg-blue-600 rounded-lg p-3 text-white text-sm uppercase font-black flex-1 md:flex-none transition-all duration-300">
+                        class="bg-blue-600 rounded-lg p-3 text-white text-sm uppercase font-black transition-all duration-300">
                         {{ service.isEditable ? 'Cancelar' : 'Editar' }}
                     </button>
 
                     <button type="button" @click="deleteService(service._id)"
-                        class="bg-red-600 rounded-lg p-3 text-white text-sm uppercase font-black flex-1 md:flex-none transition-all duration-300">
+                        class="bg-red-600 rounded-lg p-3 text-white text-sm uppercase font-black transition-all duration-300">
                         Eliminar
                     </button>
 
                     <button type="submit" v-if="service.isEditable"
                         :disabled="!service.isEditable || catalogStore.loading"
-                        class="bg-green-600 rounded-lg p-3 text-white text-sm uppercase font-black flex-1 md:flex-none transition-all duration-300"
+                        class="bg-green-600 rounded-lg p-3 text-white text-sm uppercase font-black transition-all duration-300"
                         :class="{ 'opacity-50 cursor-not-allowed': !service.isEditable || catalogStore.loading }">
                         <div class="flex items-center justify-center">
                             <div v-if="catalogStore.loading"
@@ -66,7 +62,7 @@
                     </button>
                 </div>
             </div>
-        </form>
+        </FormKit>
     </div>
 </template>
 
@@ -80,7 +76,6 @@ const originalServices = ref([]);
 
 onMounted(async () => {
     await catalogStore.fetchServices();
-
     originalServices.value = JSON.parse(JSON.stringify(catalogStore.services));
 });
 
@@ -106,7 +101,7 @@ const hasChanges = (original, edited) => {
     );
 };
 
-const updateCatalog = async () => {
+const handleSubmit = async () => {
     try {
         const servicesToUpdate = catalogStore.services.filter((service, index) =>
             service.isEditable && hasChanges(originalServices.value[index], service)
@@ -134,3 +129,30 @@ const deleteService = async (id) => {
     }
 };
 </script>
+
+<style scoped>
+.spinner-border {
+    border-width: 4px;
+    border-style: solid;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.opacity-50 {
+    opacity: 0.5;
+}
+
+.cursor-not-allowed {
+    cursor: not-allowed;
+}
+</style>
