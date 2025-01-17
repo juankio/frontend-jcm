@@ -15,7 +15,7 @@
                     }" :class="{
                         'opacity-100': service.isEditable,
                         'opacity-50 cursor-not-allowed': !service.isEditable,
-                    }" :input-class="service.isEditable ? 'bg-white text-black' : 'bg-gray-600 text-gray-500'" />
+                    }" :input-class="service.isEditable ? 'bg-black text-black' : 'bg-gray-600 text-gray-500'" />
 
                 <!-- Precio del Servicio -->
                 <FormKit type="number" label="Precio del Servicio" :disabled="!service.isEditable"
@@ -25,7 +25,7 @@
                     }" :class="{
                         'opacity-100': service.isEditable,
                         'opacity-50 cursor-not-allowed': !service.isEditable,
-                    }" :input-class="service.isEditable ? 'bg-white text-black' : 'bg-gray-600 text-gray-500'" />
+                    }" :input-class="service.isEditable ? 'bg-black text-black' : 'bg-gray-600 text-gray-500'" />
 
                 <!-- Descripción del Servicio -->
                 <FormKit type="textarea" label="Descripción del Servicio" :disabled="!service.isEditable"
@@ -34,7 +34,7 @@
                     }" :class="{
                         'opacity-100': service.isEditable,
                         'opacity-50 cursor-not-allowed': !service.isEditable,
-                    }" :input-class="service.isEditable ? 'bg-white text-black' : 'bg-gray-600 text-gray-500'" />
+                    }" :input-class="service.isEditable ? 'bg-black text-black' : 'bg-gray-600 text-gray-500'" />
 
                 <!-- Botones -->
                 <div class="flex justify-between space-x-3 mt-4">
