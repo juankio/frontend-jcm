@@ -15,6 +15,16 @@ export const useCatalogStore = defineStore('catalog', () => {
     }
   };
 
+  const createService = async (newService) => {
+    try {
+      await CatalogAPI.createService(newService);
+      await fetchServices();
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error al crear el servicio");
+    }
+  };
+
   const updateServices = async (updatedServices) => {
     loading.value = true;
     try {
@@ -40,6 +50,7 @@ export const useCatalogStore = defineStore('catalog', () => {
     services,
     loading,
     fetchServices,
+    createService,
     updateServices,
     deleteService,
   };

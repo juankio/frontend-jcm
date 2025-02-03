@@ -1,42 +1,38 @@
 <template>
-    <div class="p-5 space-y-3 rounded-lg shadow-md ">
-        <h1 class="text-2xl font-black text-green-500 mb-6">Administrar Catálogo</h1>
+    <div class="p-5 space-y-3 rounded-lg shadow-md">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-black text-green-500">Administrar Catálogo</h1>
+            <button @click="openAddServiceModal"
+            class="bg-green-600 rounded-lg p-3 text-white text-sm uppercase font-black transition-all duration-300">
+            Agregar Servicio
+            </button>
+        </div>
+
+        <AddServiceModal ref="addServiceModalRef" />
+
         <FormKit type="form" @submit="handleSubmit" :actions="false">
             <div v-for="(service, index) in catalogStore.services" :key="service._id" :class="{
                 'p-4 mb-4 border rounded-lg shadow-sm transition-all duration-300': true,
                 'bg-gray-700 text-gray-400': !service.isEditable,
                 'bg-gray-700 text-black border-green-500': service.isEditable,
             }">
-
-                <!-- Nombre del Servicio -->
                 <FormKit type="text" label="Nombre del Servicio" :disabled="!service.isEditable" v-model="service.name"
-                    validation="required" :validation-messages="{
-                        required: 'El nombre es obligatorio',
-                    }" :class="{
-                        'opacity-100': service.isEditable,
-                        'opacity-50 cursor-not-allowed': !service.isEditable,
-                    }" :input-class="service.isEditable ? 'bg-black text-black' : 'bg-gray-600 text-gray-500'" />
+                    validation="required" :validation-messages="{ required: 'El nombre es obligatorio' }"
+                    :class="{ 'opacity-100': service.isEditable, 'opacity-50 cursor-not-allowed': !service.isEditable }"
+                    :input-class="service.isEditable ? 'bg-black text-black' : 'bg-gray-600 text-gray-500'" />
 
-                <!-- Precio del Servicio -->
                 <FormKit type="number" label="Precio del Servicio" :disabled="!service.isEditable"
-                    v-model="service.price" validation="required|number" :validation-messages="{
-                        required: 'El precio es obligatorio',
-                        number: 'El precio debe ser un número válido',
-                    }" :class="{
-                        'opacity-100': service.isEditable,
-                        'opacity-50 cursor-not-allowed': !service.isEditable,
-                    }" :input-class="service.isEditable ? 'bg-black text-black' : 'bg-gray-600 text-gray-500'" />
+                    v-model="service.price" validation="required|number"
+                    :validation-messages="{ required: 'El precio es obligatorio', number: 'Debe ser un número válido' }"
+                    :class="{ 'opacity-100': service.isEditable, 'opacity-50 cursor-not-allowed': !service.isEditable }"
+                    :input-class="service.isEditable ? 'bg-black text-black' : 'bg-gray-600 text-gray-500'" />
 
-                <!-- Descripción del Servicio -->
                 <FormKit type="textarea" label="Descripción del Servicio" :disabled="!service.isEditable"
-                    v-model="service.description" validation="required" :validation-messages="{
-                        required: 'La descripción es obligatoria',
-                    }" :class="{
-                        'opacity-100': service.isEditable,
-                        'opacity-50 cursor-not-allowed': !service.isEditable,
-                    }" :input-class="service.isEditable ? 'bg-black text-black' : 'bg-gray-600 text-gray-500'" />
+                    v-model="service.description" validation="required"
+                    :validation-messages="{ required: 'La descripción es obligatoria' }"
+                    :class="{ 'opacity-100': service.isEditable, 'opacity-50 cursor-not-allowed': !service.isEditable }"
+                    :input-class="service.isEditable ? 'bg-black text-black' : 'bg-gray-600 text-gray-500'" />
 
-                <!-- Botones -->
                 <div class="flex justify-between space-x-3 mt-4">
                     <button type="button" @click="toggleEdit(service, index)"
                         class="bg-blue-600 rounded-lg p-3 text-white text-sm uppercase font-black transition-all duration-300">
@@ -67,9 +63,11 @@
 </template>
 
 <script setup>
-import { onMounted, inject, ref } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 import { useCatalogStore } from '@/stores/catalog';
+import AddServiceModal from '@/components/AddServiceModal.vue';
 
+const addServiceModalRef = ref(null);
 const toast = inject('toast');
 const catalogStore = useCatalogStore();
 const originalServices = ref([]);
@@ -78,6 +76,14 @@ onMounted(async () => {
     await catalogStore.fetchServices();
     originalServices.value = JSON.parse(JSON.stringify(catalogStore.services));
 });
+
+const openAddServiceModal = () => {
+    if (addServiceModalRef.value) {
+        addServiceModalRef.value.openModal();
+    } else {
+        console.error("El modal no está disponible en el DOM.");
+    }
+};
 
 const toggleEdit = (service, index) => {
     catalogStore.services.forEach((s, i) => {
