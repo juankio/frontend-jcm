@@ -1,20 +1,44 @@
 <template>
     <div v-if="!loading && service"
-        class="p-5 space-y-5 rounded-lg cursor-pointer transform transition-transform duration-200"
+        class="p-5 space-y-5 rounded-lg cursor-pointer transform transition-transform duration-200 flex flex-col"
         :class="appointments.isServiceSelected(service._id) ? 'bg-green-500 text-white scale-105' : 'bg-white'"
         @click="appointments.onServiceSelected(service)">
 
-        <p class="text-2xl font-bold">{{ service.name }}</p>
+        <!-- Título y precio primero -->
+        <div>
+            <p class="text-2xl font-bold">{{ service.name }}</p>
+            <p class="text-4xl font-black mt-1"
+                :class="appointments.isServiceSelected(service._id) ? 'text-white' : 'text-green-600'">
+                {{ formatCurrenCy(service.price) }}
+            </p>
+        </div>
+
+        <!-- Descripción -->
         <p class="text-sm font-light">{{ service.description }}</p>
-        <p class="text-4xl font-black"
-            :class="appointments.isServiceSelected(service._id) ? 'text-white' : 'text-green-600'">
-            {{ formatCurrenCy(service.price) }}</p>
+
+        <!-- Galería de imágenes debajo -->
+        <div v-if="service.images && service.images.length > 0" class="mt-4">
+            <!-- Imagen Principal -->
+            <img :src="service.images[currentImage]" :alt="service.name"
+                class="w-full h-40 object-cover rounded-lg shadow-md transition-opacity duration-300">
+
+            <!-- Miniaturas -->
+            <div v-if="service.images.length > 1" class="flex mt-2 space-x-2">
+                <img v-for="(image, index) in service.images" :key="index" :src="image" 
+                    :alt="`Miniatura ${index + 1}`"
+                    class="w-12 h-12 object-cover rounded-md border-2 cursor-pointer transition-transform hover:scale-105"
+                    :class="currentImage === index ? 'border-green-500' : 'border-gray-300'"
+                    @click.stop="currentImage = index">
+            </div>
+        </div>
     </div>
+
     <div v-else>
         <div class="skeleton-loader">
             <div class="skeleton-item skeleton-title"></div>
             <div class="skeleton-item skeleton-text"></div>
             <div class="skeleton-item skeleton-price"></div>
+            <div class="skeleton-item skeleton-image"></div>
         </div>
     </div>
 </template>
@@ -26,11 +50,12 @@ import { useAppointmentsStore } from '@/stores/appointments';
 
 const appointments = useAppointmentsStore();
 const loading = ref(true);
+const currentImage = ref(0); // Índice de la imagen actual en el carrusel
 
 defineProps({
     service: {
         type: Object,
-        default: () => ({})
+        default: () => ({ images: [] }) // Asegurar que `images` siempre es un array
     }
 });
 
@@ -58,18 +83,6 @@ onMounted(() => {
     overflow: hidden;
 }
 
-.skeleton-item::before {
-    content: '';
-    display: block;
-    position: absolute;
-    top: 0;
-    left: -150%;
-    height: 100%;
-    width: 150%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    animation: loading 1.5s infinite;
-}
-
 .skeleton-title {
     height: 2rem;
     width: 70%;
@@ -85,17 +98,9 @@ onMounted(() => {
     width: 50%;
 }
 
-@keyframes loading {
-    0% {
-        left: -150%;
-    }
-
-    50% {
-        left: 100%;
-    }
-
-    100% {
-        left: 100%;
-    }
+.skeleton-image {
+    height: 10rem;
+    width: 100%;
+    border-radius: 0.5rem;
 }
 </style>
