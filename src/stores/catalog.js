@@ -11,29 +11,26 @@ export const useCatalogStore = defineStore('catalog', () => {
       const { data } = await CatalogAPI.getServices();
       services.value = data;
     } catch (error) {
-      console.error(error);
+      console.error("❌ Error al obtener servicios:", error);
     }
   };
 
   const createService = async (newService) => {
     try {
-      await CatalogAPI.createService(newService);
-      await fetchServices();
+      const createdService = await CatalogAPI.createService(newService);
+      await fetchServices(); 
+      return createdService; // 🔥 Retorna el servicio con `_id`
     } catch (error) {
-      console.error(error);
       throw new Error("Error al crear el servicio");
     }
   };
 
-  const updateServices = async (updatedServices) => {
-    loading.value = true;
+  const updateService = async (serviceId, updatedService) => {
     try {
-      await CatalogAPI.updateServices(updatedServices);
+      await CatalogAPI.updateServices([{ _id: serviceId, ...updatedService }]);
       await fetchServices();
     } catch (error) {
-      console.error(error);
-    } finally {
-      loading.value = false;
+      console.error("❌ Error al actualizar el servicio:", error);
     }
   };
 
@@ -42,7 +39,29 @@ export const useCatalogStore = defineStore('catalog', () => {
       await CatalogAPI.deleteService(id);
       await fetchServices();
     } catch (error) {
-      console.error(error);
+      console.error("❌ Error al eliminar el servicio:", error);
+    }
+  };
+
+  const uploadServiceImage = async (serviceId, imageFile) => {
+    try {
+      const formData = new FormData();
+      formData.append('image', imageFile);
+
+      const response = await CatalogAPI.uploadServiceImage(serviceId, formData);
+      await fetchServices();
+      return response.imageUrl;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const deleteServiceImage = async (serviceId, imageId) => {
+    try {
+      await CatalogAPI.deleteServiceImage(serviceId, imageId);
+      await fetchServices();
+    } catch (error) {
+      throw error;
     }
   };
 
@@ -51,7 +70,9 @@ export const useCatalogStore = defineStore('catalog', () => {
     loading,
     fetchServices,
     createService,
-    updateServices,
+    updateService,
     deleteService,
+    uploadServiceImage,
+    deleteServiceImage,
   };
 });
