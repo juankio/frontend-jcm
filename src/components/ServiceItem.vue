@@ -7,10 +7,11 @@
         <!-- Título y Precio -->
         <div>
             <p class="text-2xl font-bold text-center sm:text-left">{{ service.name }}</p>
-            <p class="text-4xl font-black mt-1 text-center sm:text-left"
-                :class="appointments.isServiceSelected(service._id) ? 'text-white' : 'text-green-600'">
-                {{ formatCurrenCy(service.price) }}
-            </p>
+           <p class="text-4xl font-black mt-1 text-center sm:text-left"
+   :class="appointments.isServiceSelected(service._id) ? 'text-white' : 'text-green-600'">
+   {{ formatCurrenCy(service.price) }} COP
+</p>
+
         </div>
 
         <!-- Descripción -->
