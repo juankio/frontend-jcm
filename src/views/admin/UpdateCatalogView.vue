@@ -11,7 +11,6 @@
     <AddServiceModal ref="addServiceModalRef" />
 
     <FormKit type="form" @submit="handleSubmit" :actions="false">
-      <!-- Separa cada tarjeta con espacio vertical -->
       <div class="space-y-6">
         <div v-for="(service, index) in catalogStore.services" :key="service._id"
              class="p-6 bg-gray-800 rounded-lg shadow-md transition-all duration-300 space-y-4"
@@ -23,30 +22,29 @@
                 <img :src="image" alt="Imagen del servicio"
                      class="w-full h-24 object-cover rounded-lg border border-gray-700">
                 <button @click.prevent="removeImage(service, imgIndex)"
-        class="absolute top-1 right-1 bg-gray-800 text-gray-300 text-xs p-1 rounded-full hover:bg-gray-700">
-  ✕
-</button>
-
+                        class="absolute top-1 right-1 bg-gray-800 text-gray-300 text-xs p-1 rounded-full hover:bg-gray-700">
+                  ✕
+                </button>
               </div>
             </div>
 
             <!-- Datos del Servicio -->
             <div class="flex-1 md:w-2/3">
               <FormKit type="text" label="Nombre del Servicio" :disabled="!service.isEditable"
-                       v-model="service.name" validation="required"
+                       v-model="catalogStore.services[index].name" validation="required"
                        :validation-messages="{ required: 'El nombre es obligatorio' }"
                        class="mb-4"
                        :input-class="service.isEditable ? 'bg-gray-700 text-white' : 'bg-gray-600 text-gray-300'" />
 
               <div class="flex flex-col gap-4">
                 <FormKit type="number" label="Precio del Servicio" :disabled="!service.isEditable"
-                         v-model="service.price" validation="required|number"
+                         v-model="catalogStore.services[index].price" validation="required|number"
                          :validation-messages="{ required: 'El precio es obligatorio', number: 'Número válido' }"
                          class="mb-4"
                          :input-class="service.isEditable ? 'bg-gray-700 text-white' : 'bg-gray-600 text-gray-300'" />
 
                 <FormKit type="textarea" label="Descripción del Servicio" :disabled="!service.isEditable"
-                         v-model="service.description" validation="required"
+                         v-model="catalogStore.services[index].description" validation="required"
                          :validation-messages="{ required: 'La descripción es obligatoria' }"
                          class="mb-4"
                          :input-class="service.isEditable ? 'bg-gray-700 text-white min-h-[150px] resize-y' : 'bg-gray-600 text-gray-300 min-h-[150px] resize-y'" />
@@ -119,10 +117,41 @@ const toggleEdit = (service, index) => {
   service.isEditable = !service.isEditable;
 
   if (!service.isEditable) {
-    catalogStore.services[index] = JSON.parse(JSON.stringify(originalServices.value[index]));
+    catalogStore.services[index] = { ...originalServices.value[index] };
   }
 };
 
+const handleSubmit = async () => {
+  try {
+    const index = catalogStore.services.findIndex(s => s.isEditable);
+    if (index === -1) return;
+
+    const updatedService = catalogStore.services[index];
+
+    // 🔥 Actualizar en el backend
+    await catalogStore.updateService(updatedService._id, {
+      name: updatedService.name,
+      price: updatedService.price,
+      description: updatedService.description,
+    });
+
+    // 🔥 Reflejar el cambio en la UI sin recargar
+    updatedService.isEditable = false;
+
+    toast.success('Servicio actualizado correctamente!');
+  } catch (error) {
+    toast.error('Hubo un problema al actualizar el servicio.');
+  }
+};
+
+const deleteService = async (id) => {
+  try {
+    await catalogStore.deleteService(id);
+    toast.success('Servicio eliminado correctamente!');
+  } catch (error) {
+    toast.error('Hubo un problema al eliminar el servicio.');
+  }
+};
 const handleImageUpload = async (event, service) => {
   const files = event.target.files;
 
@@ -160,21 +189,4 @@ const removeImage = async (service, imgIndex) => {
   }
 };
 
-const handleSubmit = async () => {
-  try {
-    await catalogStore.fetchServices();
-    toast.success('Servicio actualizado correctamente!');
-  } catch (error) {
-    toast.error('Hubo un problema al actualizar el servicio.');
-  }
-};
-
-const deleteService = async (id) => {
-  try {
-    await catalogStore.deleteService(id);
-    toast.success('Servicio eliminado correctamente!');
-  } catch (error) {
-    toast.error('Hubo un problema al eliminar el servicio.');
-  }
-};
 </script>
