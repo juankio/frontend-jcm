@@ -11,7 +11,7 @@
                 <SelectedService v-for="service in appointments.services" :key="service._id" :service="service" />
                 <p class="text-right text-white text-2xl">
                     Total a pagar:
-                    <span class="font-black">{{ formatCurrenCy(appointments.totalAmount) }}</span>
+                    <span class="font-black">{{ formatCurrenCy(appointments.totalAmount) }} COP</span>
                 </p>
             </div>
         </div>
