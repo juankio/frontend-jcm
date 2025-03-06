@@ -21,11 +21,11 @@
             <p class="text-lg font-black">Servicios Solicitados en la cita</p>
             <div v-for="service in appointment.serviceDetails" :key="service.name">
                 <p>{{ service.name }}</p>
-                <p class="text-2xl font-black text-green-600">{{ formatCurrenCy(service.price) }}</p>
+                <p class="text-2xl font-black text-green-600">{{ formatCurrenCy(service.price) }} COP</p>
             </div>
 
             <p class="text-2xl font-black text-right">
-                Total a pagar: <span class="text-green-600">{{ formatCurrenCy(appointment.totalAmount) }}</span>
+                Total a pagar: <span class="text-green-600">{{ formatCurrenCy(appointment.totalAmount) }} COP</span>
             </p>
 
             <div class="flex gap-2 items-center">
