@@ -5,22 +5,22 @@
             <p class="text-white text-lg">A continuación verifica la información y confirma tu cita</p>
 
             <h3 class="text-3xl font-extrabold text-white">Servicios</h3>
-            <p v-if="appointments.noServicesSelected" class="text-white text-2xl text-center">No hay servicios
-                seleccionados</p>
+            <p v-if="appointments.noServicesSelectied" class="text-white text-2xl text-center">No hay servicios seleccionados</p>
             <div v-else class="grid gap-5">
                 <SelectedService v-for="service in appointments.services" :key="service._id" :service="service" />
                 <p class="text-right text-white text-2xl">
                     Total a pagar:
-                    <span class="font-black">{{ formatCurrenCy(appointments.totalAmount) }} COP</span>
+                    <span class="font-black">{{ formatCurrenCy(appointments.totalAmount) }}</span>
                 </p>
             </div>
         </div>
-        <div class="space-y-8" v-if="!appointments.noServicesSelected">
+        <div class="space-y-8" v-if="!appointments.noServicesSelectied">
             <h3 class="text-3xl font-extrabold text-white">Fecha y hora</h3>
 
             <div class="lg:flex gap-5 items-start">
-                <div class="w-50 lg:w-96  flex justify-center rounded-lg">
-                    <DatePicker v-model="date" mode="date" is-dark="system" title-position="left" :min-date="today" />
+                <div class="w-50 ld:w-96 bg-white flex justify-center rounded-lg">
+                    <VueTailwindDatepicker :disable-date="disableDate" i18n="es-mx" as-single no-input
+                        :formatter="formatter" v-model="appointments.date" />
                 </div>
                 <div v-if="appointments.isDateSelected"
                     class="flex-1 grid grid-cols-1 xl:grid-cols-2 gap-5 mt-10 lg:mt-0">
@@ -37,6 +37,7 @@
                 <button
                     class="w-full md:w-auto bg-green-600 p-3 rounded-lg uppercase font-black text-white flex items-center justify-center"
                     @click="appointments.saveAppointment" :disabled="appointments.loading">
+
                     <div v-if="appointments.loading"
                         class="spinner-border animate-spin inline-block w-6 h-6 border-4 rounded-full border-t-transparent border-white mr-3">
                     </div>
@@ -48,33 +49,30 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
-import { DatePicker } from 'v-calendar';
-import { format } from 'date-fns';
-import 'v-calendar/style.css';
+import { ref } from 'vue';
+import VueTailwindDatepicker from 'vue-tailwind-datepicker';
 import SelectedService from '@/components/SelectedService.vue';
 import { useAppointmentsStore } from '@/stores/appointments';
 import { formatCurrenCy } from '@/helpers/index';
 
 const appointments = useAppointmentsStore();
 
-const date = ref(new Date());
-const today = ref(new Date());
 const formatter = ref({
-    date: 'dd/MM/yyyy',
-    month: 'MMM',
+    date: 'DD/MM/YYYY',
+    month: 'MMM'
 });
 
-const formattedDate = computed(() => {
-    return format(date.value, formatter.value.date);
-});
+const disableDate = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Elimina la hora para comparar solo la fecha
 
-// Watch for changes in the formattedDate and update appointments.date
-watch(formattedDate, (newValue) => {
-    appointments.date = newValue;
-});
+    const selectedDate = new Date(date);
+    selectedDate.setHours(0, 0, 0, 0);
 
+    return selectedDate.getTime() < today.getTime(); // Bloquea fechas pasadas
+};
 </script>
+
 
 <style scoped>
 .spinner-border {

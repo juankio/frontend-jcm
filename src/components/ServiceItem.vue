@@ -25,14 +25,15 @@
                     class="w-full h-full object-cover object-center transition-opacity duration-300">
             </div>
 
-            <!-- Miniaturas -->
+           <!-- Miniaturas -->
             <div v-if="service.images.length > 1" class="flex mt-2 space-x-2 overflow-x-auto px-2">
-                <img v-for="(image, index) in service.images" :key="index" :src="image" 
+                <img v-for="(image, index) in service.images.slice(0, 3)" :key="index" :src="image" 
                     :alt="`Miniatura ${index + 1}`"
                     class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 object-cover rounded-md border-2 cursor-pointer transition-transform hover:scale-110"
                     :class="currentImage === index ? 'border-green-500' : 'border-gray-300'"
                     @click.stop="currentImage = index">
             </div>
+
         </div>
     </div>
 

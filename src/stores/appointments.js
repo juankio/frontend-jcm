@@ -1,78 +1,75 @@
-import { ref, computed, onMounted, inject, watch } from 'vue';
+import {ref,computed, onMounted,inject, watch } from 'vue'
 import { defineStore } from "pinia";
 import AppointmentAPI from '@/api/AppointmentAPI';
-import { useUserStore } from './user';
 import { convertToISO, converToDDMMYYYY } from '@/helpers/date';
 import { useRouter } from 'vue-router';
+import { useUserStore } from './user';
 
-export const useAppointmentsStore = defineStore('appointments', () => {
+export const useAppointmentsStore= defineStore('appointments', ()=>{
 
-    const appointmentId = ref('');
-    const services = ref([]);
-    const date = ref('');
-    const time = ref('');
+    const appointmentId= ref('')
+    const services= ref([])
+    const date= ref('')
+    const time=ref('')
     const loading = ref(false);
 
-    const toast = inject('toast');
-    const hours = ref([]);
-    const router = useRouter();
-    const appointmentByDate = ref([]);
-    const User = useUserStore();
+    const toast = inject('toast')
+    const hours=ref([])
+    const router = useRouter()
+    const appointmentByDate = ref([])
+    const User = useUserStore()
 
-    onMounted(() => {
-        const startHour = 10;
-        const endHour = 19;
+    onMounted(()=>{
+        const startHour= 10
+        const endHour= 19
         for (let hour = startHour; hour <= endHour; hour++) {
-            hours.value.push(hour + ':00');
+           
+            hours.value.push(hour+':00')
+            
         }
-    });
-
-    const availableAppointments = computed(() => {
-        if (date.value === '') return [];
-        return appointmentByDate.value.filter(appointment => appointment.date === date.value);
-    });
-
-    watch(date, async () => {
-        time.value = '';
-        if (date.value === '') return;
-
-        try {
-            const { data } = await AppointmentAPI.getByData(date.value);
-            appointmentByDate.value = data;
-
-            if (appointmentId.value) {
-                appointmentByDate.value = data.filter(appointment => appointment._id !== appointmentId.value);
-                time.value = data.find(appointment => appointment._id === appointmentId.value)?.time || '';
-            }
-        } catch (error) {
-            handleError(error, 'Error fetching appointments by date:');
+    })
+    watch(date,async()=>{
+        time.value= ''
+        if (date.value === '') return
+        const {data}= await AppointmentAPI.getByData(date.value)
+        appointmentByDate.value= data
+        console.log(data)
+        if (appointmentId.value) {
+            appointmentByDate.value= data.filter(appointment =>appointment._id !== appointmentId.value)
+            time.value = data.filter(appointment =>appointment._id === appointmentId.value)[0].time
+            
+        }else{
+            console.log('nuevo')
+            
         }
-    });
-
-    function setSelectedAppointment(appointment) {
-        services.value = appointment.services;
-        date.value = converToDDMMYYYY(appointment.date);
-        time.value = appointment.time;
-        appointmentId.value = appointment._id;
+        
+    })
+    function setSelectedAppointment(appointment){
+        console.log(appointment)
+        services.value= appointment.services
+        date.value = converToDDMMYYYY(appointment.date)
+        time.value= appointment.time
+        appointmentId.value = appointment._id
+        
     }
-
-    function onServiceSelected(service) {
-        if (services.value.some(selectedService => selectedService._id === service._id)) {
-            services.value = services.value.filter(selectedService => selectedService._id !== service._id);
-        } else {
+   
+    function onServiceSelected(service){
+        if ( services.value.some(selecService =>selecService._id=== service._id)) {
+            services.value= services.value.filter(selecService =>selecService._id !== service._id)    
+        }else{
             if (services.value.length === 2) {
                 toast.open({
-                    message: 'Solo se pueden escoger 2 productos',
-                    type: 'error'
-                });
-                return;
+                    message:'Solo se pueden escoger 2 productos',
+                    type:'error'
+                })
+                return
             }
-            services.value.push(service);
+            services.value.push(service)
         }
+        
     }
-
     async function saveAppointment() {
-        loading.value = true;
+        loading.value = true;  
         const appointment = {
             services: services.value.map(service => service._id),
             date: convertToISO(date.value),
@@ -83,7 +80,7 @@ export const useAppointmentsStore = defineStore('appointments', () => {
         try {
             let data;
             if (appointmentId.value) {
-                ({ data } = await AppointmentAPI.updete(appointmentId.value, appointment));
+                ({ data } = await AppointmentAPI.updete(appointmentId.value, appointment) )
             } else {
                 ({ data } = await AppointmentAPI.create(appointment));
             }
@@ -92,20 +89,25 @@ export const useAppointmentsStore = defineStore('appointments', () => {
                 type: 'success'
             });
             clearAppointmentDate();
-            await User.getUserAppointments();
+            User.getUserAppointments();
             router.push({ name: 'my-appointments' });
         } catch (error) {
-            handleError(error, 'Error saving appointment:');
+            console.error(error);
+            toast.open({
+                message: 'Error al guardar la cita',
+                type: 'error'
+            });
         } finally {
-            loading.value = false;
+            loading.value = false;  
         }
     }
 
-    function clearAppointmentDate() {
-        appointmentId.value = '';
-        services.value = [];
-        date.value = '';
-        time.value = '';
+
+    function clearAppointmentDate(){
+        appointmentId.value=''
+        services.value= []
+        date.value=''
+        time.value=''
     }
 
     async function cancelAppointment(id) {
@@ -120,40 +122,28 @@ export const useAppointmentsStore = defineStore('appointments', () => {
             handleError(error, 'Error canceling appointment:');
         }
     }
+    const isServiceSelected= computed(()=>{
+        return (id)=>services.value.some(service => service._id === id) 
 
-    function handleError(error, message) {
-        console.error(message, error);
-        toast.open({
-            message: 'Error al procesar la solicitud.',
-            type: 'error'
-        });
-    }
+    })
+    const noServicesSelectied =computed(()=>services.value.length==0)
 
-    const isServiceSelected = computed(() => {
-        return (id) => services.value.some(service => service._id === id);
-    });
+    const totalAmount=computed(()=>{
+        return services.value.reduce((total, service)=>total + service.price, 0)
+    })
+    const isValidReservation=computed(()=>{
+        return services.value.length && date.value.length && time.value.length
+    })
 
-    const noServicesSelected = computed(() => services.value.length == 0);
-
-    const totalAmount = computed(() => {
-        return services.value.reduce((total, service) => total + service.price, 0);
-    });
-
-    const isValidReservation = computed(() => {
-        return services.value.length && date.value.length && time.value.length;
-    });
-
-    const isDateSelected = computed(() => {
-        return !!date.value;
-    });
-
-    const disableTime = computed(() => {
-        return (hour) => {
-            return availableAppointments.value.some(appointment => appointment.time === hour);
+    const isDateSelected = computed(()=>{
+        return date.value ? true : false
+    })
+    const disableTime = computed(()=>{
+        return (hour)=>{
+            return appointmentByDate.value.find(appointment => appointment.time === hour)
         }
-    });
-
-    return {
+    })
+    return{
         onServiceSelected,
         saveAppointment,
         clearAppointmentDate,
@@ -166,9 +156,9 @@ export const useAppointmentsStore = defineStore('appointments', () => {
         hours,
         time,
         totalAmount,
-        noServicesSelected,
+        noServicesSelectied,
         isValidReservation,
         isDateSelected,
         disableTime,
     }
-});
+})
