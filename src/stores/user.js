@@ -12,21 +12,26 @@ export const useUserStore = defineStore('user', () => {
 
     function handleError(error, message) {
         console.error(message, error);
+        console.log('Server response:', error.response?.data);
     }
 
-    onMounted(async () => {
+    async function authenticateUser() {
         try {
             const { data } = await AuthAPI.auth();
             user.value = data;
-            await getUserAppointments();
+            if (user.value._id) {
+                await getUserAppointments();
+            }
         } catch (error) {
             handleError(error, 'Error during authentication or fetching appointments:');
+            router.push({ name: 'login' });
         } finally {
             loading.value = false;
         }
-    });
+    }
 
     async function getUserAppointments() {
+        if (!user.value._id) return;
         try {
             const { data } = await AppointmentAPI.getUserAppointments(user.value._id);
             userAppointment.value = data;
@@ -44,6 +49,8 @@ export const useUserStore = defineStore('user', () => {
     const getUserName = computed(() => user.value?.name || '');
     const noAppointments = computed(() => userAppointment.value.length === 0);
     const isAdmin = computed(() => user.value?.role === 'admin');
+
+    onMounted(authenticateUser);
 
     return {
         user,

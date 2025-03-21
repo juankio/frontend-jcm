@@ -40,14 +40,13 @@ const routes = [
   },
   {
     path: '/reservaciones',
-    name: 'appointments',
     component: AppointmentsLayout,
-    redirect: { name: 'my-appointments' },
+    redirect: { name: 'appointments' },
     meta: { requiresAuth: true },
     children: [
       {
         path: '',
-        name: 'my-appointments',
+        name: 'appointments',
         component: () => import('../views/appointments/MyAppointmentsView.vue'),
       },
       {
