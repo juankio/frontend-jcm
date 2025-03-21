@@ -11,7 +11,7 @@
           <RouterLink v-if="route.name !== 'about'" :to="{ name: 'about' }"
             class="p-3 text-gray-200 uppercase text-base font-black rounded-lg transition duration-300 ease-in-out transform hover:text-green-500 hover:scale-105"
             :class="route.name === 'about' ? 'bg-green-700 text-white' : 'text-white'">
-            ¿Quienes somos?
+            ¿Quiénes somos?
           </RouterLink>
           <RouterLink v-else :to="{ name: 'my-appointments' }"
             class="p-3 text-gray-200 uppercase text-base font-black rounded-lg transition duration-300 ease-in-out transform hover:text-green-500 hover:scale-105"
@@ -22,7 +22,7 @@
           <RouterLink v-if="route.name !== 'galeria'" :to="{ name: 'galeria' }"
             class="p-3 text-gray-200 uppercase text-base font-black rounded-lg transition duration-300 ease-in-out transform hover:text-green-500 hover:scale-105"
             :class="route.name === 'galeria' ? 'bg-green-700 text-white' : 'text-white'">
-            Nuestra Galeria
+           Nuestra Galería
           </RouterLink>
 
           <RouterLink v-else :to="{ name: 'my-appointments' }"
