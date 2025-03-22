@@ -69,10 +69,12 @@ const disableDate = (date) => {
     const selectedDate = new Date(date);
     selectedDate.setHours(0, 0, 0, 0);
 
-    return selectedDate.getTime() < today.getTime(); // Bloquea fechas pasadas
+    const minDate = new Date(today);
+    minDate.setDate(minDate.getDate() + 2); // Se bloquea el día actual y el siguiente
+
+    return selectedDate.getTime() < minDate.getTime(); // Bloquea fechas pasadas y los próximos 2 días
 };
 </script>
-
 
 <style scoped>
 .spinner-border {

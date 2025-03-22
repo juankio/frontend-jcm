@@ -70,17 +70,37 @@ export const useAppointmentsStore= defineStore('appointments', ()=>{
     }
     async function saveAppointment() {
         loading.value = true;  
+    
+        // Validar que la fecha sea mínimo 2 días después de hoy
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+    
+        const minDate = new Date(today);
+        minDate.setDate(minDate.getDate() + 2); // Se suma 2 días
+    
+        const selectedDate = new Date(convertToISO(date.value));
+        selectedDate.setHours(0, 0, 0, 0);
+    
+        if (selectedDate.getTime() < minDate.getTime()) {
+            toast.open({
+                message: 'Debes agendar tu cita con al menos 2 días de anticipación.',
+                type: 'error'
+            });
+            loading.value = false;
+            return;
+        }
+    
         const appointment = {
             services: services.value.map(service => service._id),
             date: convertToISO(date.value),
             time: time.value,
             totalAmount: totalAmount.value
         };
-
+    
         try {
             let data;
             if (appointmentId.value) {
-                ({ data } = await AppointmentAPI.updete(appointmentId.value, appointment) )
+                ({ data } = await AppointmentAPI.updete(appointmentId.value, appointment));
             } else {
                 ({ data } = await AppointmentAPI.create(appointment));
             }
@@ -101,6 +121,8 @@ export const useAppointmentsStore= defineStore('appointments', ()=>{
             loading.value = false;  
         }
     }
+    
+    
 
 
     function clearAppointmentDate(){
