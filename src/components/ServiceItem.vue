@@ -7,11 +7,10 @@
         <!-- Título y Precio -->
         <div>
             <p class="text-2xl font-bold text-center sm:text-left">{{ service.name }}</p>
-           <p class="text-4xl font-black mt-1 text-center sm:text-left"
-   :class="appointments.isServiceSelected(service._id) ? 'text-white' : 'text-green-600'">
-   {{ formatCurrenCy(service.price) }} COP
-</p>
-
+            <p class="text-4xl font-black mt-1 text-center sm:text-left"
+                :class="appointments.isServiceSelected(service._id) ? 'text-white' : 'text-green-600'">
+                {{ formatCurrenCy(service.price) }} COP
+            </p>
         </div>
 
         <!-- Descripción -->
@@ -25,7 +24,7 @@
                     class="w-full h-full object-cover object-center transition-opacity duration-300">
             </div>
 
-           <!-- Miniaturas -->
+            <!-- Miniaturas -->
             <div v-if="service.images.length > 1" class="flex mt-2 space-x-2 overflow-x-auto px-2">
                 <img v-for="(image, index) in service.images.slice(0, 3)" :key="index" :src="image" 
                     :alt="`Miniatura ${index + 1}`"
@@ -33,7 +32,6 @@
                     :class="currentImage === index ? 'border-green-500' : 'border-gray-300'"
                     @click.stop="currentImage = index">
             </div>
-
         </div>
     </div>
 

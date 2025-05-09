@@ -1,5 +1,5 @@
-export const formatCurrenCy= price =>
-    Number(price).toLocaleString('en-US',{
-        style:'currency',
-        currency:'USD'
-    })
+export function formatCurrenCy(value) {
+  if (!value) return '$0';
+  return `$${value.toLocaleString('es-CO')}`;
+}
+
