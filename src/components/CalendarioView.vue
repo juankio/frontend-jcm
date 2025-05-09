@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import { formatCurrenCy } from '@/helpers';
 
 // Recibir las citas como props
 const props = defineProps({
@@ -66,12 +67,12 @@ const closeModal = () => {
                 <p class="font-semibold mt-2">Servicios:</p>
                 <ul class="list-disc pl-4">
                     <li v-for="service in selectedEvent?.services" :key="service._id">
-                        {{ service.name }} - ${{ service.price }}
+                        {{ service.name }} - {{ formatCurrenCy(service.price) }}
                     </li>
                 </ul>
 
                 <!-- Precio total -->
-                <p class="font-semibold mt-2">Total: ${{ selectedEvent?.totalAmount }}</p>
+                <p class="font-semibold mt-2">Total: {{ formatCurrenCy(selectedEvent?.totalAmount) }}</p>
 
                 <button @click="closeModal" class="mt-4 w-full bg-red-600 text-white py-2 rounded-lg">
                     Cerrar
