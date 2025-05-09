@@ -3,9 +3,7 @@
     <h1 class="text-4xl font-bold text-white text-center my-8">
       Bienvenido a JCM FOTOS Y VIDEOS
     </h1>
-    <!-- Usamos 1 columna en móvil y 2 columnas en pantallas medianas en adelante -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6" ref="gridContainer">
-      
       <!-- Nuestra Historia -->
       <div class="bg-gray-800 hover:bg-gray-700 text-white py-6 px-8 rounded-xl shadow-lg transform transition duration-300 hover:scale-105 md:col-span-2 flex flex-col">
         <h1 class="text-3xl font-bold mb-4 text-green-400">Nuestra Historia</h1>
@@ -81,39 +79,38 @@
         <div class="grid grid-cols-2 gap-4">
           <div class="text-left">
             <ul>
-              <a href="#">
-                <li class="flex items-center mb-2">
-                  <font-awesome-icon class="mr-2" size="lg" :icon="['fab', 'facebook']" />
-                  Facebook
-                </li>
-              </a>
-              <a href="#">
+              <a href="https://www.instagram.com/jcmfotosyvideos/" target="_blank">
                 <li class="flex items-center mb-2">
                   <font-awesome-icon class="mr-2" size="lg" :icon="['fab', 'instagram']" />
                   Instagram
                 </li>
               </a>
+              <a @click.prevent="showToast('Facebook')">
+                <li class="flex items-center mb-2">
+                  <font-awesome-icon class="mr-2" size="lg" :icon="['fab', 'facebook']" />
+                  Facebook
+                </li>
+              </a>
             </ul>
           </div>
-          <div class="text-right">
+            <div class="text-right">
             <ul>
-              <a href="#">
+              <a @click.prevent="showToast('Twitter')">
                 <li class="flex items-center mb-2">
                   <font-awesome-icon class="mr-2" size="lg" :icon="['fab', 'twitter']" />
                   Twitter
                 </li>
               </a>
-              <a href="#">
+              <a href="mailto:jcmfotosyvideos2012@gmail.com?subject=Consulta%20sobre%20Servicios&body=Hola,%20me%20interesa%20saber%20más%20sobre%20los%20servicios." target="_blank">
                 <li class="flex items-center mb-2">
                   <font-awesome-icon class="mr-2" size="lg" :icon="['fab', 'google']" />
                   Gmail
                 </li>
               </a>
             </ul>
-          </div>
+            </div>
         </div>
       </div>
-      
       <!-- Nuestra Ubicación -->
       <div class="bg-gray-800 hover:bg-gray-700 py-8 px-10 text-white rounded-xl shadow-lg transform transition duration-300 hover:scale-105 md:col-span-2 flex flex-col">
         <h1 class="text-4xl font-bold mb-4 text-green-400">Nuestra Ubicación</h1>
@@ -122,7 +119,7 @@
         </p>
         <div class="mt-4 rounded-xl overflow-hidden">
           <iframe class="w-full h-64"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3979.412017686479!2d-73.6367637251348!3d4.139079195834722!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3e2f39f12f7857%3A0xc349c5399fae4104!2sUNIMINUTO%20Villavicencio!5e0!3m2!1ses!2sco!4v1710038198787!5m2!1ses!2sco"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3979.330400739369!2d-73.63524662416373!3d4.155286046142566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3e2de99ca12cf3%3A0x128ea5bb1b7f6d87!2sCl.%2039b%20%23%2026-16%2C%20Villavicencio%2C%20Meta!5e0!3m2!1ses-419!2sco!4v1746825666019!5m2!1ses-419!2sco"
                   style="border:0;" allowfullscreen="" loading="lazy"
                   referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
@@ -133,21 +130,21 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { inject } from 'vue';
 
-const gridContainer = ref(null);
+const toast = inject('toast');
 
-onMounted(() => {
-  // Si deseas mantener el reordenamiento aleatorio, de lo contrario puedes eliminarlo.
-  const gridItems = Array.from(gridContainer.value.children);
-  shuffleArray(gridItems);
-  gridItems.forEach(item => gridContainer.value.appendChild(item));
-});
-
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
+// Función para mostrar el toast interactivo
+function showToast(network) {
+  toast.success(`Próximamente, ¡estaremos en ${network}!`, {
+    // Asegura que el contenido se renderice como HTML si es necesario
+    dangerouslyUseHTMLString: true
+  });
 }
 </script>
+
+<style scoped>
+.toast-container {
+  user-select: text; /* Permite la selección de texto */
+}
+</style>
