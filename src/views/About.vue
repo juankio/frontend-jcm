@@ -55,20 +55,21 @@
       </div>
       
       <!-- Nuestros Logros -->
-      <div class="bg-gray-800 hover:bg-gray-700 text-white py-8 px-10 rounded-xl shadow-lg transform transition duration-300 hover:scale-105 flex flex-col">
-        <h1 class="text-2xl font-bold mb-4 text-green-400">Nuestros Logros</h1>
-        <ul class="flex-grow">
-          <li class="flex items-center mb-2">
-            <i class="material-icons mr-2">emoji_events</i> Primer lugar en concurso de fotografía
-          </li>
-          <li class="flex items-center mb-2">
-            <i class="material-icons mr-2">emoji_events</i> Reconocimiento por excelencia en fotografía de eventos
-          </li>
-          <li class="flex items-center mb-2">
-            <i class="material-icons mr-2">emoji_events</i> Premio a la innovación en servicios fotográficos
-          </li>
-        </ul>
-      </div>
+<div class="bg-gray-800 hover:bg-gray-700 text-white py-8 px-10 rounded-xl shadow-lg transform transition duration-300 hover:scale-105 flex flex-col">
+  <h1 class="text-2xl font-bold mb-4 text-green-400">Nuestros Logros</h1>
+  <ul class="flex-grow">
+    <li class="flex items-center mb-2">
+      <i class="material-icons mr-2">emoji_events</i> Primer lugar en concurso de fotografía (Agosto 2022)
+    </li>
+    <li class="flex items-center mb-2">
+      <i class="material-icons mr-2">emoji_events</i> Reconocimiento por excelencia en fotografía de eventos (Mayo 2023)
+    </li>
+    <li class="flex items-center mb-2">
+      <i class="material-icons mr-2">emoji_events</i> Premio a la innovación en servicios fotográficos (Marzo 2024)
+    </li>
+  </ul>
+</div>
+
       
       <!-- ¡Contáctanos! -->
       <div class="bg-gray-800 hover:bg-gray-700 text-white py-8 px-10 rounded-xl shadow-lg transform transition duration-300 hover:scale-105 flex flex-col">
